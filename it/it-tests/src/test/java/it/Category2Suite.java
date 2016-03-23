@@ -38,7 +38,6 @@ import it.issue.NewIssuesMeasureTest;
 import it.qualityModel.MaintainabilityMeasureTest;
 import it.qualityModel.MaintainabilityRatingMeasureTest;
 import it.qualityModel.TechnicalDebtInIssueChangelogTest;
-import it.qualityModel.TechnicalDebtPurgeTest;
 import it.qualityModel.TechnicalDebtTest;
 import it.qualityModel.TechnicalDebtWidgetTest;
 import it.rule.ManualRulesTest;
@@ -82,7 +81,6 @@ import static util.ItUtils.xooPlugin;
   MaintainabilityRatingMeasureTest.class,
   TechnicalDebtInIssueChangelogTest.class,
   MaintainabilityMeasureTest.class,
-  TechnicalDebtPurgeTest.class,
   TechnicalDebtTest.class,
   TechnicalDebtWidgetTest.class
 })
@@ -93,7 +91,6 @@ public class Category2Suite {
     .addPlugin(xooPlugin())
 
     // issue
-    .addPlugin(pluginArtifact("issue-action-plugin"))
     .addPlugin(pluginArtifact("issue-filter-plugin"))
 
     // 1 second. Required for notification test.
