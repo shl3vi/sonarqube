@@ -51,12 +51,9 @@ CI)
     set_maven_build_version $TRAVIS_BUILD_NUMBER
    
     # the profile "deploy-sonarsource" is defined in parent pom v28+
-    mvn org.jacoco:jacoco-maven-plugin:prepare-agent deploy sonar:sonar \
-      -Pcoverage-per-test,deploy-sonarsource \
+    mvn deploy \
+      -Pdeploy-sonarsource \
       -Dmaven.test.redirectTestOutputToFile=false \
-      -Dsonar.host.url=$SONAR_HOST_URL \
-      -Dsonar.login=$SONAR_TOKEN \
-      -Dsonar.projectVersion=$SONAR_PROJECT_VERSION \
       -B -e -V
   else
     strongEcho 'Build, no analysis, no deploy'
