@@ -44,7 +44,7 @@ CI)
         -Dsonar.host.url=$SONAR_HOST_URL \
         -Dsonar.login=$SONAR_TOKEN \
         -B -e -V
-  if [ "${TRAVIS_BRANCH}" == "feature/cix" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  elif [ "${TRAVIS_BRANCH}" == "feature/cix" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     SONAR_PROJECT_VERSION=`maven_expression "project.version"`
  
     # Do not deploy a SNAPSHOT version but the release version related to this build
