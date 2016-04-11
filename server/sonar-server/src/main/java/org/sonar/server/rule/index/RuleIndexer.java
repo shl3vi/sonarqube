@@ -67,6 +67,7 @@ public class RuleIndexer extends BaseIndexer {
     long maxDate = 0L;
     while (rules.hasNext()) {
       RuleDoc rule = rules.next();
+      System.out.println(rule);
       // TODO when active rule is not more DAO v2, restore deleting of REMOVED rules and also remove active rules linked to this rule
       // if (rule.status() == RuleStatus.REMOVED) {
       // bulk.add(newDeleteRequest(rule));
