@@ -23,7 +23,7 @@ import React from 'react';
 
 import BugsAndVulnerabilities from './BugsAndVulnerabilities';
 import CodeSmells from './CodeSmells';
-import { GeneralCoverage } from './coverage';
+import Coverage from './Coverage';
 import { GeneralDuplications } from './duplications';
 import { GeneralStructure } from './structure';
 import { CoverageSelectionMixin } from '../components/coverage-selection-mixin';
@@ -157,8 +157,12 @@ export default React.createClass({
           leakPeriod={leakPeriod}
           history={this.state.history['sqale_index']}/>
 
-      <GeneralCoverage {...props} coverageMetricPrefix={this.state.coverageMetricPrefix}
-                                  history={this.state.history[coverageMetric]}/>
+      <Coverage
+          component={component}
+          measures={measures}
+          leakPeriod={leakPeriod}
+          history={this.state.history}/>
+      
       <GeneralDuplications {...props} history={this.state.history['duplicated_lines_density']}/>
       <GeneralStructure {...props} history={this.state.history['ncloc']}/>
     </div>;
