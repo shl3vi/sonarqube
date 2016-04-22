@@ -35,7 +35,7 @@ export default class OverviewApp extends React.Component {
 
   componentWillUnmount () {
     this.mounted = false;
-    document.querySelector('html').classList.delete('dashboard-page');
+    document.querySelector('html').classList.remove('dashboard-page');
   }
 
   requestMetrics () {
