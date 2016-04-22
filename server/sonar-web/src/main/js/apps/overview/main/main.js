@@ -24,7 +24,7 @@ import React from 'react';
 import BugsAndVulnerabilities from './BugsAndVulnerabilities';
 import CodeSmells from './CodeSmells';
 import Coverage from './Coverage';
-import { GeneralDuplications } from './duplications';
+import Duplications from './Duplications';
 import { GeneralStructure } from './structure';
 import { CoverageSelectionMixin } from '../components/coverage-selection-mixin';
 import { getPeriodLabel, getPeriodDate } from './../helpers/periods';
@@ -162,8 +162,13 @@ export default React.createClass({
           measures={measures}
           leakPeriod={leakPeriod}
           history={this.state.history}/>
-      
-      <GeneralDuplications {...props} history={this.state.history['duplicated_lines_density']}/>
+
+      <Duplications
+          component={component}
+          measures={measures}
+          leakPeriod={leakPeriod}
+          history={this.state.history['duplicated_lines_density']}/>
+
       <GeneralStructure {...props} history={this.state.history['ncloc']}/>
     </div>;
   }
