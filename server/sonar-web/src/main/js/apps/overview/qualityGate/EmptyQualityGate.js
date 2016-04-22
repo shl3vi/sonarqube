@@ -18,18 +18,20 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import React from 'react';
+
 import { translate } from '../../../helpers/l10n';
 
-export default React.createClass({
-  render() {
-    const qualityGatesUrl = window.baseUrl + '/quality_gates';
+const EmptyQualityGate = () => {
+  return (
+      <div className="overview-quality-gate">
+        <h2 className="overview-title">
+          {translate('overview.quality_gate')}
+        </h2>
+        <p className="overview-quality-gate-warning">
+          {translate('overview.you_should_define_quality_gate')}
+        </p>
+      </div>
+  );
+};
 
-    return (
-        <div className="overview-gate">
-          <h2 className="overview-title">{translate('overview.quality_gate')}</h2>
-          <p className="overview-gate-warning">
-            You should <a href={qualityGatesUrl}>define</a> a quality gate on this project.</p>
-        </div>
-    );
-  }
-});
+export default EmptyQualityGate;

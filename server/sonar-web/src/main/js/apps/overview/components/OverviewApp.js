@@ -19,18 +19,34 @@
  */
 import React from 'react';
 
-import Gate from '../gate/gate';
+import QualityGate from '../qualityGate/QualityGate';
 import GeneralMain from './../main/main';
 import Meta from './Meta';
 import { getMetrics } from '../../../api/metrics';
+import { getMeasuresAndMeta } from '../../../api/measures';
+import { enhanceMeasuresWithMetrics } from '../../../helpers/measures';
+
+const METRICS = [
+  'alert_status',
+  'quality_gate_details'
+];
 
 export default class OverviewApp extends React.Component {
-  state = {};
+  state = {
+    loading: true
+  };
 
   componentDidMount () {
     this.mounted = true;
     document.querySelector('html').classList.add('dashboard-page');
     this.requestMetrics();
+    this.loadMeasures(this.props.component);
+  }
+
+  componentDidUpdate (nextProps) {
+    if (this.props.component !== nextProps.component) {
+      this.loadMeasures(nextProps.component);
+    }
   }
 
   componentWillUnmount () {
@@ -46,6 +62,24 @@ export default class OverviewApp extends React.Component {
     });
   }
 
+  loadMeasures (component) {
+    this.setState({ loading: true });
+
+    getMeasuresAndMeta(
+        component.key,
+        METRICS,
+        { additionalFields: 'metrics,periods' }
+    ).then(r => {
+      if (this.mounted) {
+        this.setState({
+          loading: false,
+          measures: enhanceMeasuresWithMetrics(r.component.measures, r.metrics),
+          periods: r.periods
+        });
+      }
+    });
+  }
+
   renderLoading () {
     return (
         <div className="text-center">
@@ -55,17 +89,29 @@ export default class OverviewApp extends React.Component {
   }
 
   render () {
-    if (!this.state.metrics) {
+    const { loading, metrics, measures, periods } = this.state;
+
+    if (!metrics || loading) {
       return this.renderLoading();
     }
 
     const props = { ...this.props, metrics: this.state.metrics };
 
+    const qualityGateStatusMeasure =
+        measures.find(measure => measure.metric.key === 'alert_status');
+    const qualityGateMeasure =
+        measures.find(measure => measure.metric.key === 'quality_gate_details');
+
     return (
         <div className="page page-limited">
           <div className="overview">
             <div className="overview-main">
-              <Gate component={props.component} gate={props.gate}/>
+              <QualityGate
+                  component={this.props.component}
+                  status={qualityGateStatusMeasure}
+                  measure={qualityGateMeasure}
+                  periods={periods}/>
+
               <GeneralMain {...props}/>
             </div>
             <Meta component={props.component}/>
