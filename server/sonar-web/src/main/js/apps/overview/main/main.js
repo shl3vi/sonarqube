@@ -25,7 +25,8 @@ import BugsAndVulnerabilities from './BugsAndVulnerabilities';
 import CodeSmells from './CodeSmells';
 import Coverage from './Coverage';
 import Duplications from './Duplications';
-import { GeneralStructure } from './structure';
+import Size from './Size';
+
 import { CoverageSelectionMixin } from '../components/coverage-selection-mixin';
 import { getPeriodLabel, getPeriodDate } from './../helpers/periods';
 import { getMeasures } from '../../../api/measures';
@@ -141,10 +142,7 @@ export default React.createClass({
     }
 
     const { component, measures, leakPeriod } = this.props;
-
-    const coverageMetric = this.state.coverageMetricPrefix + 'coverage';
-    const props = _.extend({}, this.props, this.state);
-
+    
     return <div className="overview-domains-list">
       <BugsAndVulnerabilities
           component={component}
@@ -169,7 +167,11 @@ export default React.createClass({
           leakPeriod={leakPeriod}
           history={this.state.history['duplicated_lines_density']}/>
 
-      <GeneralStructure {...props} history={this.state.history['ncloc']}/>
+      <Size
+          component={component}
+          measures={measures}
+          leakPeriod={leakPeriod}
+          history={this.state.history['ncloc']}/>
     </div>;
   }
 });
