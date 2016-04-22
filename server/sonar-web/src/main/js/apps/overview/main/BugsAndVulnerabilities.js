@@ -23,11 +23,10 @@ import moment from 'moment';
 import { Rating } from './../../../components/shared/rating';
 import { IssuesLink } from '../../../components/shared/issues-link';
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
-import { Legend } from '../components/legend';
+import LeakPeriodLegend from '../components/LeakPeriodLegend';
 import { getMetricName } from '../helpers/metrics';
 import { formatMeasure, isDiffMetric, getPeriodValue } from '../../../helpers/measures';
 import { translate, translateWithParameters } from '../../../helpers/l10n';
-import { getPeriodDate, getPeriodLabel } from '../../../helpers/periods';
 
 export default class BugsAndVulnerabilities extends React.Component {
   getValue (measure) {
@@ -108,12 +107,9 @@ export default class BugsAndVulnerabilities extends React.Component {
       return null;
     }
 
-    const leakPeriodLabel = getPeriodLabel(leakPeriod);
-    const leakPeriodDate = getPeriodDate(leakPeriod);
-
     return (
         <div className="overview-domain-leak">
-          <Legend leakPeriodLabel={leakPeriodLabel} leakPeriodDate={leakPeriodDate}/>
+          <LeakPeriodLegend period={leakPeriod}/>
 
           <div className="overview-domain-measures">
             <div className="overview-domain-measure">

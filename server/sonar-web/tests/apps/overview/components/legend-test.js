@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
-import { Legend } from '../../../../src/main/js/apps/overview/components/legend';
+import { Legend } from '../../../../src/main/js/apps/overview/components/LeakPeriodLegend';
 
 
 const DATE = new Date(2015, 3, 7);
