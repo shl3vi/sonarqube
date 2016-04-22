@@ -22,7 +22,7 @@ import moment from 'moment';
 import React from 'react';
 
 import BugsAndVulnerabilities from './BugsAndVulnerabilities';
-import { CodeSmells } from './code-smells';
+import CodeSmells from './CodeSmells';
 import { GeneralCoverage } from './coverage';
 import { GeneralDuplications } from './duplications';
 import { GeneralStructure } from './structure';
@@ -151,7 +151,12 @@ export default React.createClass({
           measures={measures}
           leakPeriod={leakPeriod}/>
 
-      <CodeSmells {...props} history={this.state.history['sqale_index']}/>
+      <CodeSmells
+          component={component}
+          measures={measures}
+          leakPeriod={leakPeriod}
+          history={this.state.history['sqale_index']}/>
+
       <GeneralCoverage {...props} coverageMetricPrefix={this.state.coverageMetricPrefix}
                                   history={this.state.history[coverageMetric]}/>
       <GeneralDuplications {...props} history={this.state.history['duplicated_lines_density']}/>
