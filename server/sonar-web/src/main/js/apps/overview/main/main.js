@@ -21,7 +21,7 @@ import _ from 'underscore';
 import moment from 'moment';
 import React from 'react';
 
-import { Risk } from './risk';
+import BugsAndVulnerabilities from './BugsAndVulnerabilities';
 import { CodeSmells } from './code-smells';
 import { GeneralCoverage } from './coverage';
 import { GeneralDuplications } from './duplications';
@@ -140,11 +140,17 @@ export default React.createClass({
       return this.renderLoading();
     }
 
+    const { component, measures, leakPeriod } = this.props;
+
     const coverageMetric = this.state.coverageMetricPrefix + 'coverage';
     const props = _.extend({}, this.props, this.state);
 
     return <div className="overview-domains-list">
-      <Risk {...props}/>
+      <BugsAndVulnerabilities
+          component={component}
+          measures={measures}
+          leakPeriod={leakPeriod}/>
+
       <CodeSmells {...props} history={this.state.history['sqale_index']}/>
       <GeneralCoverage {...props} coverageMetricPrefix={this.state.coverageMetricPrefix}
                                   history={this.state.history[coverageMetric]}/>

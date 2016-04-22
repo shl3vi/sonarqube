@@ -25,10 +25,46 @@ import Meta from './Meta';
 import { getMetrics } from '../../../api/metrics';
 import { getMeasuresAndMeta } from '../../../api/measures';
 import { enhanceMeasuresWithMetrics } from '../../../helpers/measures';
+import { getLeakPeriod } from '../../../helpers/periods';
 
 const METRICS = [
+  // quality gate
   'alert_status',
-  'quality_gate_details'
+  'quality_gate_details',
+
+  // bugs
+  'bugs',
+  'new_bugs',
+  'reliability_rating',
+
+  // vulnerabilities
+  'vulnerabilities',
+  'new_vulnerabilities',
+  'security_rating',
+
+  // code smells
+  'code_smells',
+  'new_code_smells',
+  'sqale_rating',
+  'sqale_index',
+  'new_technical_debt',
+
+  // coverage
+  'overall_coverage',
+  'new_overall_coverage',
+  'coverage',
+  'new_coverage',
+  'it_coverage',
+  'new_it_coverage',
+  'tests',
+
+  // duplications
+  'duplicated_lines_density',
+  'duplicated_blocks',
+
+  // size
+  'ncloc',
+  'ncloc_language_distribution'
 ];
 
 export default class OverviewApp extends React.Component {
@@ -97,6 +133,8 @@ export default class OverviewApp extends React.Component {
 
     const props = { ...this.props, metrics: this.state.metrics };
 
+    const leakPeriod = getLeakPeriod(periods);
+
     const qualityGateStatusMeasure =
         measures.find(measure => measure.metric.key === 'alert_status');
     const qualityGateMeasure =
@@ -112,7 +150,7 @@ export default class OverviewApp extends React.Component {
                   measure={qualityGateMeasure}
                   periods={periods}/>
 
-              <GeneralMain {...props}/>
+              <GeneralMain {...props} measures={measures} leakPeriod={leakPeriod}/>
             </div>
             <Meta component={props.component}/>
           </div>
