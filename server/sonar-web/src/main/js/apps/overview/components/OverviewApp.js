@@ -19,7 +19,9 @@
  */
 import React from 'react';
 
-import OverviewMain from './OverviewMain';
+import Gate from '../gate/gate';
+import GeneralMain from './../main/main';
+import Meta from './Meta';
 import { getMetrics } from '../../../api/metrics';
 
 export default class OverviewApp extends React.Component {
@@ -57,6 +59,18 @@ export default class OverviewApp extends React.Component {
       return this.renderLoading();
     }
 
-    return <OverviewMain {...this.props} metrics={this.state.metrics}/>;
+    const props = { ...this.props, metrics: this.state.metrics };
+
+    return (
+        <div className="page page-limited">
+          <div className="overview">
+            <div className="overview-main">
+              <Gate component={props.component} gate={props.gate}/>
+              <GeneralMain {...props}/>
+            </div>
+            <Meta component={props.component}/>
+          </div>
+        </div>
+    );
   }
 }
