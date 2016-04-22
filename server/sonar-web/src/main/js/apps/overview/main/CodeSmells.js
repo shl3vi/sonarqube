@@ -131,8 +131,15 @@ export default class CodeSmells extends React.Component {
     if (!this.props.history) {
       return null;
     }
+
+    const history = this.props.history['sqale_index'];
+
+    if (!history) {
+      return null;
+    }
+
     const props = {
-      history: this.props.history,
+      history,
       [range]: getPeriodDate(this.props.leakPeriod)
     };
     return (

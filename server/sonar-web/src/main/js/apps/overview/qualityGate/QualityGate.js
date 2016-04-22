@@ -21,7 +21,7 @@ import React from 'react';
 
 import QualityGateConditions from './QualityGateConditions';
 import EmptyQualityGate from './EmptyQualityGate';
-import { ComponentType, MeasureType, PeriodsListType } from '../propTypes';
+import { ComponentType, MeasuresListType, PeriodsListType } from '../propTypes';
 import { translate } from '../../../helpers/l10n';
 
 import './styles.css';
@@ -34,16 +34,21 @@ function isProject (component) {
   return component.qualifier === 'TRK';
 }
 
-const QualityGate = ({ component, status, measure, periods }) => {
-  if (!status) {
+const QualityGate = ({ component, measures, periods }) => {
+  const statusMeasure =
+      measures.find(measure => measure.metric.key === 'alert_status');
+  const detailsMeasure =
+      measures.find(measure => measure.metric.key === 'quality_gate_details');
+
+  if (!statusMeasure) {
     return isProject(component) ? <EmptyQualityGate/> : null;
   }
 
-  const level = status.value;
+  const level = statusMeasure.value;
 
   let conditions = [];
-  if (measure) {
-    conditions = parseQualityGateDetails(measure.value).conditions;
+  if (detailsMeasure) {
+    conditions = parseQualityGateDetails(detailsMeasure.value).conditions;
   }
 
   return (
@@ -67,8 +72,7 @@ const QualityGate = ({ component, status, measure, periods }) => {
 
 QualityGate.propTypes = {
   component: ComponentType.isRequired,
-  status: MeasureType,
-  measure: MeasureType,
+  measures: MeasuresListType.isRequired,
   periods: PeriodsListType.isRequired
 };
 

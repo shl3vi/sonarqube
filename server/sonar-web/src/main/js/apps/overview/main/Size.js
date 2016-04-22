@@ -49,8 +49,14 @@ export default class Size extends React.Component {
       return null;
     }
 
+    const history = this.props.history['ncloc'];
+
+    if (!history) {
+      return null;
+    }
+
     const props = {
-      history: this.props.history,
+      history,
       [range]: getPeriodDate(this.props.leakPeriod)
     };
 

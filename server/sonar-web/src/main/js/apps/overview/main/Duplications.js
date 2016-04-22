@@ -49,8 +49,14 @@ export default class Duplications extends React.Component {
       return null;
     }
 
+    const history = this.props.history['duplicated_lines_density'];
+
+    if (!history) {
+      return null;
+    }
+
     const props = {
-      history: this.props.history,
+      history,
       [range]: getPeriodDate(this.props.leakPeriod)
     };
 

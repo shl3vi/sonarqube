@@ -18,14 +18,20 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import React from 'react';
+import moment from 'moment';
 
 import QualityGate from '../qualityGate/QualityGate';
-import GeneralMain from './../main/main';
+import BugsAndVulnerabilities from '../main/BugsAndVulnerabilities';
+import CodeSmells from '../main/CodeSmells';
+import Coverage from '../main/Coverage';
+import Duplications from '../main/Duplications';
+import Size from '../main/Size';
 import Meta from './Meta';
-import { getMetrics } from '../../../api/metrics';
 import { getMeasuresAndMeta } from '../../../api/measures';
+import { getTimeMachineData } from '../../../api/time-machine';
 import { enhanceMeasuresWithMetrics } from '../../../helpers/measures';
 import { getLeakPeriod } from '../../../helpers/periods';
+import { ComponentType } from '../propTypes';
 
 const METRICS = [
   // quality gate
@@ -67,7 +73,22 @@ const METRICS = [
   'ncloc_language_distribution'
 ];
 
+const HISTORY_METRICS_LIST = [
+  'sqale_index',
+  'duplicated_lines_density',
+  'ncloc',
+  'overall_coverage',
+  'it_coverage',
+  'coverage'
+];
+
+// TODO handle provisioned projects
+
 export default class OverviewApp extends React.Component {
+  static propTypes = {
+    component: ComponentType.isRequired
+  };
+
   state = {
     loading: true
   };
@@ -75,13 +96,14 @@ export default class OverviewApp extends React.Component {
   componentDidMount () {
     this.mounted = true;
     document.querySelector('html').classList.add('dashboard-page');
-    this.requestMetrics();
-    this.loadMeasures(this.props.component);
+    this.loadMeasures(this.props.component)
+        .then(() => this.loadHistory(this.props.component));
   }
 
   componentDidUpdate (nextProps) {
     if (this.props.component !== nextProps.component) {
-      this.loadMeasures(nextProps.component);
+      this.loadMeasures(nextProps.component)
+          .then(() => this.loadHistory(nextProps.component));
     }
   }
 
@@ -90,18 +112,10 @@ export default class OverviewApp extends React.Component {
     document.querySelector('html').classList.remove('dashboard-page');
   }
 
-  requestMetrics () {
-    return getMetrics().then(metrics => {
-      if (this.mounted) {
-        this.setState({ metrics });
-      }
-    });
-  }
-
   loadMeasures (component) {
     this.setState({ loading: true });
 
-    getMeasuresAndMeta(
+    return getMeasuresAndMeta(
         component.key,
         METRICS,
         { additionalFields: 'metrics,periods' }
@@ -116,6 +130,24 @@ export default class OverviewApp extends React.Component {
     });
   }
 
+  loadHistory (component) {
+    const metrics = HISTORY_METRICS_LIST.join(',');
+    return getTimeMachineData(component.key, metrics).then(r => {
+      if (this.mounted) {
+        const history = {};
+        r[0].cols.forEach((col, index) => {
+          history[col.metric] = r[0].cells.map(cell => {
+            const date = moment(cell.d).toDate();
+            const value = cell.v[index] || 0;
+            return { date, value };
+          });
+        });
+        const historyStartDate = history[HISTORY_METRICS_LIST[0]][0].date;
+        this.setState({ history, historyStartDate });
+      }
+    });
+  }
+
   renderLoading () {
     return (
         <div className="text-center">
@@ -125,34 +157,35 @@ export default class OverviewApp extends React.Component {
   }
 
   render () {
-    const { loading, metrics, measures, periods } = this.state;
+    const { component } = this.props;
+    const { loading, measures, periods, history, historyStartDate } = this.state;
 
-    if (!metrics || loading) {
+    if (loading) {
       return this.renderLoading();
     }
 
-    const props = { ...this.props, metrics: this.state.metrics };
-
     const leakPeriod = getLeakPeriod(periods);
-
-    const qualityGateStatusMeasure =
-        measures.find(measure => measure.metric.key === 'alert_status');
-    const qualityGateMeasure =
-        measures.find(measure => measure.metric.key === 'quality_gate_details');
+    const domainProps = { component, measures, leakPeriod, history, historyStartDate };
 
     return (
         <div className="page page-limited">
           <div className="overview">
             <div className="overview-main">
               <QualityGate
-                  component={this.props.component}
-                  status={qualityGateStatusMeasure}
-                  measure={qualityGateMeasure}
+                  component={component}
+                  measures={measures}
                   periods={periods}/>
 
-              <GeneralMain {...props} measures={measures} leakPeriod={leakPeriod}/>
+              <div className="overview-domains-list">
+                <BugsAndVulnerabilities {...domainProps}/>
+                <CodeSmells {...domainProps}/>
+                <Coverage {...domainProps}/>
+                <Duplications {...domainProps}/>
+                <Size {...domainProps}/>
+              </div>
             </div>
-            <Meta component={props.component}/>
+
+            <Meta component={component}/>
           </div>
         </div>
     );

@@ -37,6 +37,8 @@ export const MeasureType = shape({
   periods: array
 });
 
+export const MeasuresListType = arrayOf(MeasureType);
+
 export const ConditionType = shape({
   metric: string.isRequired
 });
