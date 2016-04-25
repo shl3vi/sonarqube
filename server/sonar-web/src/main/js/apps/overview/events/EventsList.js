@@ -19,9 +19,10 @@
  */
 import moment from 'moment';
 import React from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 
-import { Event } from './event';
-import { EventsListFilter } from './events-list-filter';
+import Event from './Event';
+import EventsListFilter from './EventsListFilter';
 import { getEvents } from '../../../api/events';
 import { translate } from '../../../helpers/l10n';
 
@@ -37,6 +38,10 @@ export default class EventsList extends React.Component {
   componentDidMount () {
     this.mounted = true;
     this.fetchEvents();
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
 
   componentDidUpdate (nextProps) {

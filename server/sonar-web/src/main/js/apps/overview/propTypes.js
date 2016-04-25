@@ -19,7 +19,7 @@
  */
 import { PropTypes } from 'react';
 
-const { shape, arrayOf, array, string, number } = PropTypes;
+const { shape, arrayOf, array, string, number, object } = PropTypes;
 
 export const ComponentType = shape({
   id: string.isRequired
@@ -59,3 +59,11 @@ export const PeriodType = shape({
 });
 
 export const PeriodsListType = arrayOf(PeriodType);
+
+export const EventType = shape({
+  id: string.isRequired,
+  date: object.isRequired,
+  type: string.isRequired,
+  name: string.isRequired,
+  text: string
+});

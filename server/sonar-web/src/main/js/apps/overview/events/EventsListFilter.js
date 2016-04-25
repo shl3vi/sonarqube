@@ -23,28 +23,30 @@ import { translate } from '../../../helpers/l10n';
 
 const TYPES = ['All', 'Version', 'Alert', 'Profile', 'Other'];
 
-export const EventsListFilter = React.createClass({
-  propTypes: {
-    onFilter: React.PropTypes.func.isRequired,
-    currentFilter: React.PropTypes.string.isRequired
-  },
+const EventsListFilter = ({ currentFilter, onFilter }) => {
+  const handleChange = selected => onFilter(selected.value);
 
-  handleChange(selected) {
-    this.props.onFilter(selected.value);
-  },
+  const options = TYPES.map(type => {
+    return {
+      value: type,
+      label: translate('event.category', type)
+    };
+  });
 
-  render () {
-    const options = TYPES.map(type => {
-      return {
-        value: type,
-        label: translate('event.category', type)
-      };
-    });
-    return <Select value={this.props.currentFilter}
-                   options={options}
-                   clearable={false}
-                   searchable={false}
-                   onChange={this.handleChange}
-                   style={{ width: '125px' }}/>;
-  }
-});
+  return (
+      <Select
+          value={currentFilter}
+          options={options}
+          clearable={false}
+          searchable={false}
+          onChange={handleChange}
+          style={{ width: '125px' }}/>
+  );
+};
+
+EventsListFilter.propTypes = {
+  onFilter: React.PropTypes.func.isRequired,
+  currentFilter: React.PropTypes.string.isRequired
+};
+
+export default EventsListFilter;

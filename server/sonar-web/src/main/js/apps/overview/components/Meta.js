@@ -23,7 +23,7 @@ import MetaKey from './MetaKey';
 import MetaLinks from './MetaLinks';
 import MetaQualityGate from './MetaQualityGate';
 import MetaQualityProfiles from './MetaQualityProfiles';
-import EventsList from './EventsList';
+import EventsList from './../events/EventsList';
 
 export default function Meta ({ component }) {
   const { qualifier, description, links, profiles, gate } = component;
