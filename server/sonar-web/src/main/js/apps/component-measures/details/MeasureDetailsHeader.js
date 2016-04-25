@@ -20,7 +20,7 @@
 import React from 'react';
 
 import Measure from './../components/Measure';
-import LanguageDistribution from './../components/LanguageDistribution';
+import LanguageDistribution from '../../../components/charts/LanguageDistribution';
 import LeakPeriodLegend from '../components/LeakPeriodLegend';
 import { ComplexityDistribution } from '../../../components/shared/complexity-distribution';
 import { isDiffMetric, formatLeak } from '../utils';

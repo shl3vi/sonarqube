@@ -20,7 +20,7 @@
 import React from 'react';
 
 import enhance from './enhance';
-import { LanguageDistribution } from '../components/language-distribution';
+import LanguageDistribution from '../../../components/charts/LanguageDistribution';
 import { translate } from '../../../helpers/l10n';
 
 class Size extends React.Component {
@@ -54,8 +54,6 @@ class Size extends React.Component {
 
   renderLanguageDistribution () {
     const { measures } = this.props;
-    const linesOfCode =
-        measures.find(measure => measure.metric.key === 'ncloc');
     const distribution =
         measures.find(measure => measure.metric.key === 'ncloc_language_distribution');
 
@@ -66,9 +64,7 @@ class Size extends React.Component {
     return (
         <div className="overview-domain-measure">
           <div style={{ width: 200 }}>
-            <LanguageDistribution
-                lines={Number(linesOfCode.value)}
-                distribution={distribution.value}/>
+            <LanguageDistribution distribution={distribution.value}/>
           </div>
         </div>
     );
