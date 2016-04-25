@@ -24,11 +24,21 @@ import { LineChart } from '../../../components/charts/line-chart';
 
 const HEIGHT = 80;
 
-export class Timeline extends React.Component {
+export default class Timeline extends React.Component {
+  static propTypes = {
+    history: React.PropTypes.arrayOf(
+        React.PropTypes.object
+    ).isRequired,
+    before: React.PropTypes.object,
+    after: React.PropTypes.object
+  };
+
   filterSnapshots () {
-    return this.props.history.filter(s => {
-      const matchBefore = !this.props.before || s.date <= this.props.before;
-      const matchAfter = !this.props.after || s.date >= this.props.after;
+    const { history, before, after } = this.props;
+
+    return history.filter(s => {
+      const matchBefore = !before || s.date <= before;
+      const matchAfter = !after || s.date >= after;
       return matchBefore && matchAfter;
     });
   }
@@ -46,19 +56,16 @@ export class Timeline extends React.Component {
 
     const domain = [0, d3.max(this.props.history, d => d.value)];
 
-    return <LineChart data={data}
-                      domain={domain}
-                      interpolate="basis"
-                      displayBackdrop={true}
-                      displayPoints={false}
-                      displayVerticalGrid={false}
-                      height={HEIGHT}
-                      padding={[0, 0, 0, 0]}/>;
+    return (
+        <LineChart
+            data={data}
+            domain={domain}
+            interpolate="basis"
+            displayBackdrop={true}
+            displayPoints={false}
+            displayVerticalGrid={false}
+            height={HEIGHT}
+            padding={[0, 0, 0, 0]}/>
+    );
   }
 }
-
-Timeline.propTypes = {
-  history: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  before: React.PropTypes.object,
-  after: React.PropTypes.object
-};

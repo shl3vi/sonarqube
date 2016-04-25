@@ -23,7 +23,7 @@ import React from 'react';
 import { Rating } from './../../../components/shared/rating';
 import { IssuesLink } from '../../../components/shared/issues-link';
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
-import { Timeline } from './timeline';
+import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
 import { translate, translateWithParameters } from '../../../helpers/l10n';
 import { formatMeasure, isDiffMetric, getPeriodValue } from '../../../helpers/measures';

@@ -21,7 +21,7 @@ import React from 'react';
 
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
 import { LanguageDistribution } from '../components/language-distribution';
-import { Timeline } from './timeline';
+import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
 import { formatMeasure, formatMeasureVariation, getPeriodValue } from '../../../helpers/measures';
 import { translate } from '../../../helpers/l10n';

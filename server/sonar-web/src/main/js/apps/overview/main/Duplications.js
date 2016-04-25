@@ -21,7 +21,7 @@ import React from 'react';
 
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
 import { DonutChart } from '../../../components/charts/donut-chart';
-import { Timeline } from './timeline';
+import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
 import { formatMeasure, formatMeasureVariation, getPeriodValue } from '../../../helpers/measures';
 import { translate } from '../../../helpers/l10n';
