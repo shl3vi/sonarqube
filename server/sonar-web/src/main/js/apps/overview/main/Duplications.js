@@ -19,76 +19,25 @@
  */
 import React from 'react';
 
+import enhance from './enhance';
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
-import { DonutChart } from '../../../components/charts/donut-chart';
-import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
-import { formatMeasure, formatMeasureVariation, getPeriodValue } from '../../../helpers/measures';
+import { formatMeasure } from '../../../helpers/measures';
 import { translate } from '../../../helpers/l10n';
-import { getPeriodDate } from '../../../helpers/periods';
 
-export default class Duplications extends React.Component {
+class Duplications extends React.Component {
   renderHeader () {
-    const { component } = this.props;
-    const domainUrl = window.baseUrl + '/component_measures/domain/Duplications?id=' +
-        encodeURIComponent(component.key);
-
-    return (
-        <div className="overview-card-header">
-          <div className="overview-title">
-            <a href={domainUrl}>
-              {translate('overview.domain.duplications')}
-            </a>
-          </div>
-        </div>
-    );
+    return this.props.renderHeader(
+        'Duplications',
+        translate('overview.domain.duplications'));
   }
 
   renderTimeline (range) {
-    if (!this.props.history) {
-      return null;
-    }
-
-    const history = this.props.history['duplicated_lines_density'];
-
-    if (!history) {
-      return null;
-    }
-
-    const props = {
-      history,
-      [range]: getPeriodDate(this.props.leakPeriod)
-    };
-
-    return (
-        <div className="overview-domain-timeline">
-          <Timeline {...props}/>
-        </div>
-    );
+    return this.props.renderTimeline('duplicated_lines_density', range);
   }
 
   renderDuplicatedBlocks () {
-    const { measures, component } = this.props;
-    const duplicatedBlocks =
-        measures.find(measure => measure.metric.key === 'duplicated_blocks');
-
-    if (duplicatedBlocks == null) {
-      return null;
-    }
-
-    return (
-        <div className="overview-domain-measure">
-          <div className="overview-domain-measure-value">
-            <DrilldownLink component={component.key} metric="duplicated_blocks">
-              {formatMeasure(duplicatedBlocks.value, 'SHORT_INT')}
-            </DrilldownLink>
-          </div>
-
-          <div className="overview-domain-measure-label">
-            {getMetricName('duplicated_blocks')}
-          </div>
-        </div>
-    );
+    return this.props.renderMeasure('duplicated_blocks');
   }
 
   renderDuplicationsDonut (duplications) {
@@ -96,19 +45,7 @@ export default class Duplications extends React.Component {
       { value: duplications, fill: '#f3ca8e' },
       { value: Math.max(0, 20 - duplications), fill: '#e6e6e6' }
     ];
-
-    const props = {
-      data,
-      width: 40,
-      height: 40,
-      thickness: 4
-    };
-
-    return (
-        <div className="display-inline-block text-middle big-spacer-right">
-          <DonutChart {...props}/>
-        </div>
-    );
+    return this.props.renderDonut(data);
   }
 
   renderDuplications () {
@@ -149,31 +86,20 @@ export default class Duplications extends React.Component {
   }
 
   renderLeak () {
-    const { measures, leakPeriod } = this.props;
+    const { leakPeriod } = this.props;
 
     if (leakPeriod == null) {
       return null;
     }
 
-    const measure =
-        measures.find(measure => measure.metric.key === 'duplicated_lines_density');
-    const periodValue = getPeriodValue(measure, leakPeriod.index);
-    const formatted = periodValue != null ?
-        formatMeasureVariation(periodValue, 'PERCENT') :
-        '—';
+    const measure = this.props.renderMeasureVariation(
+        'duplicated_lines_density',
+        getMetricName('duplications'));
 
     return (
         <div className="overview-domain-leak">
           <div className="overview-domain-measures">
-            <div className="overview-domain-measure">
-              <div className="overview-domain-measure-value">
-                {formatted}
-              </div>
-
-              <div className="overview-domain-measure-label">
-                {getMetricName('duplications')}
-              </div>
-            </div>
+            {measure}
           </div>
 
           {this.renderTimeline('after')}
@@ -202,3 +128,5 @@ export default class Duplications extends React.Component {
     );
   }
 }
+
+export default enhance(Duplications);

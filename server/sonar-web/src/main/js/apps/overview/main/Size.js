@@ -19,80 +19,32 @@
  */
 import React from 'react';
 
-import { DrilldownLink } from '../../../components/shared/drilldown-link';
+import enhance from './enhance';
 import { LanguageDistribution } from '../components/language-distribution';
-import Timeline from '../components/Timeline';
-import { getMetricName } from '../helpers/metrics';
-import { formatMeasure, formatMeasureVariation, getPeriodValue } from '../../../helpers/measures';
 import { translate } from '../../../helpers/l10n';
-import { getPeriodDate } from '../../../helpers/periods';
 
-export default class Size extends React.Component {
+class Size extends React.Component {
   renderHeader () {
-    const { component } = this.props;
-    const domainUrl = window.baseUrl + '/component_measures/domain/Size?id=' +
-        encodeURIComponent(component.key);
-
-    return (
-        <div className="overview-card-header">
-          <div className="overview-title">
-            <a href={domainUrl}>
-              {translate('overview.domain.structure')}
-            </a>
-          </div>
-        </div>
-    );
+    return this.props.renderHeader(
+        'Size',
+        translate('overview.domain.structure'));
   }
 
   renderTimeline (range) {
-    if (!this.props.history) {
-      return null;
-    }
-
-    const history = this.props.history['ncloc'];
-
-    if (!history) {
-      return null;
-    }
-
-    const props = {
-      history,
-      [range]: getPeriodDate(this.props.leakPeriod)
-    };
-
-    return (
-        <div className="overview-domain-timeline">
-          <Timeline {...props}/>
-        </div>
-    );
+    return this.props.renderTimeline('ncloc', range);
   }
 
   renderLeak () {
-    const { measures, leakPeriod } = this.props;
+    const { leakPeriod } = this.props;
 
     if (leakPeriod == null) {
       return null;
     }
 
-    const measure =
-        measures.find(measure => measure.metric.key === 'ncloc');
-    const periodValue = getPeriodValue(measure, leakPeriod.index);
-    const formatted = periodValue != null ?
-        formatMeasureVariation(periodValue, 'SHORT_INT') :
-        '—';
-
     return (
         <div className="overview-domain-leak">
           <div className="overview-domain-measures">
-            <div className="overview-domain-measure">
-              <div className="overview-domain-measure-value">
-                {formatted}
-              </div>
-
-              <div className="overview-domain-measure-label">
-                {getMetricName('ncloc')}
-              </div>
-            </div>
+            {this.props.renderMeasureVariation('ncloc')}
           </div>
 
           {this.renderTimeline('after')}
@@ -123,26 +75,11 @@ export default class Size extends React.Component {
   }
 
   renderNutshell () {
-    const { measures, component } = this.props;
-    const linesOfCode =
-        measures.find(measure => measure.metric.key === 'ncloc');
-
     return (
         <div className="overview-domain-nutshell">
           <div className="overview-domain-measures">
             {this.renderLanguageDistribution()}
-
-            <div className="overview-domain-measure">
-              <div className="overview-domain-measure-value">
-                <DrilldownLink component={component.key} metric="ncloc">
-                  {formatMeasure(linesOfCode.value, 'SHORT_INT')}
-                </DrilldownLink>
-              </div>
-
-              <div className="overview-domain-measure-label">
-                {getMetricName('ncloc')}
-              </div>
-            </div>
+            {this.props.renderMeasure('ncloc')}
           </div>
 
           {this.renderTimeline('before')}
@@ -171,3 +108,5 @@ export default class Size extends React.Component {
     );
   }
 }
+
+export default enhance(Size);

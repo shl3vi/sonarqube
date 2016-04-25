@@ -18,27 +18,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import React from 'react';
-import moment from 'moment';
 
-import { Rating } from './../../../components/shared/rating';
-import { IssuesLink } from '../../../components/shared/issues-link';
-import { DrilldownLink } from '../../../components/shared/drilldown-link';
+import enhance from './enhance';
 import LeakPeriodLegend from '../components/LeakPeriodLegend';
 import { getMetricName } from '../helpers/metrics';
-import { formatMeasure, isDiffMetric, getPeriodValue } from '../../../helpers/measures';
-import { translate, translateWithParameters } from '../../../helpers/l10n';
+import { translate } from '../../../helpers/l10n';
 
-export default class BugsAndVulnerabilities extends React.Component {
-  getValue (measure) {
-    if (!measure) {
-      return 0;
-    }
-
-    return isDiffMetric(measure.metric.key) ?
-        getPeriodValue(measure, 1) :
-        measure.value;
-  }
-
+class BugsAndVulnerabilities extends React.Component {
   renderHeader () {
     const { component } = this.props;
     const bugsDomainUrl = window.baseUrl + '/component_measures/domain/Reliability?id=' +
@@ -61,45 +47,6 @@ export default class BugsAndVulnerabilities extends React.Component {
     );
   }
 
-  renderRating (metric) {
-    const { component, measures } = this.props;
-    const measure = measures.find(measure => measure.metric.key === metric);
-
-    if (!measure) {
-      return null;
-    }
-
-    return (
-        <div className="overview-domain-measure-sup">
-          <DrilldownLink component={component.key} metric={metric}>
-            <Rating value={measure.value}/>
-          </DrilldownLink>
-        </div>
-    );
-  }
-
-  renderIssues (metric, type) {
-    const { measures, component } = this.props;
-    const measure = measures.find(measure => measure.metric.key === metric);
-    const value = this.getValue(measure);
-    const params = { resolved: 'false', types: type };
-
-    if (isDiffMetric(metric)) {
-      Object.assign(params, { sinceLeakPeriod: 'true' });
-    }
-
-    const formattedSnapshotDate = moment(component.snapshotDate).format('LLL');
-    const tooltip = translateWithParameters('widget.as_calculated_on_x', formattedSnapshotDate);
-
-    return (
-        <IssuesLink component={component.key} params={params}>
-          <span title={tooltip} data-toggle="tooltip">
-            {formatMeasure(value, 'SHORT_INT')}
-          </span>
-        </IssuesLink>
-    );
-  }
-
   renderLeak () {
     const { leakPeriod } = this.props;
 
@@ -114,7 +61,7 @@ export default class BugsAndVulnerabilities extends React.Component {
           <div className="overview-domain-measures">
             <div className="overview-domain-measure">
               <div className="overview-domain-measure-value">
-                {this.renderIssues('new_bugs', 'BUG')}
+                {this.props.renderIssues('new_bugs', 'BUG')}
               </div>
               <div className="overview-domain-measure-label">
                 {getMetricName('new_bugs')}
@@ -123,7 +70,7 @@ export default class BugsAndVulnerabilities extends React.Component {
 
             <div className="overview-domain-measure">
               <div className="overview-domain-measure-value">
-                {this.renderIssues('new_vulnerabilities', 'VULNERABILITY')}
+                {this.props.renderIssues('new_vulnerabilities', 'VULNERABILITY')}
               </div>
               <div className="overview-domain-measure-label">
                 {getMetricName('new_vulnerabilities')}
@@ -142,8 +89,8 @@ export default class BugsAndVulnerabilities extends React.Component {
             <div className="overview-domain-measure">
               <div className="display-inline-block text-middle" style={{ paddingLeft: 56 }}>
                 <div className="overview-domain-measure-value">
-                  {this.renderIssues('bugs', 'BUG')}
-                  {this.renderRating('reliability_rating')}
+                  {this.props.renderIssues('bugs', 'BUG')}
+                  {this.props.renderRating('reliability_rating')}
                 </div>
                 <div className="overview-domain-measure-label">
                   {getMetricName('bugs')}
@@ -154,8 +101,8 @@ export default class BugsAndVulnerabilities extends React.Component {
             <div className="overview-domain-measure">
               <div className="display-inline-block text-middle">
                 <div className="overview-domain-measure-value">
-                  {this.renderIssues('vulnerabilities', 'VULNERABILITY')}
-                  {this.renderRating('security_rating')}
+                  {this.props.renderIssues('vulnerabilities', 'VULNERABILITY')}
+                  {this.props.renderRating('security_rating')}
                 </div>
                 <div className="overview-domain-measure-label">
                   {getMetricName('vulnerabilities')}
@@ -180,3 +127,5 @@ export default class BugsAndVulnerabilities extends React.Component {
     );
   }
 }
+
+export default enhance(BugsAndVulnerabilities);

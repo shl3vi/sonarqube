@@ -20,85 +20,23 @@
 import moment from 'moment';
 import React from 'react';
 
-import { Rating } from './../../../components/shared/rating';
+import enhance from './enhance';
 import { IssuesLink } from '../../../components/shared/issues-link';
-import { DrilldownLink } from '../../../components/shared/drilldown-link';
-import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
 import { translate, translateWithParameters } from '../../../helpers/l10n';
-import { formatMeasure, isDiffMetric, getPeriodValue } from '../../../helpers/measures';
-import { getPeriodDate } from '../../../helpers/periods';
+import { formatMeasure, isDiffMetric } from '../../../helpers/measures';
 
-export default class CodeSmells extends React.Component {
-  getValue (measure) {
-    if (!measure) {
-      return 0;
-    }
-
-    return isDiffMetric(measure.metric.key) ?
-        getPeriodValue(measure, 1) :
-        measure.value;
-  }
-
+class CodeSmells extends React.Component {
   renderHeader () {
-    const { component } = this.props;
-    const domainUrl = window.baseUrl + '/component_measures/domain/Maintainability?id=' +
-        encodeURIComponent(component.key);
-
-    return (
-        <div className="overview-card-header">
-          <div className="overview-title">
-            <a href={domainUrl}>
-              {translate('metric.code_smells.name')}
-            </a>
-          </div>
-        </div>
-    );
-  }
-
-  renderRating (metric) {
-    const { component, measures } = this.props;
-    const measure = measures.find(measure => measure.metric.key === metric);
-
-    if (!measure) {
-      return null;
-    }
-
-    return (
-        <div className="overview-domain-measure-sup">
-          <DrilldownLink component={component.key} metric={metric}>
-            <Rating value={measure.value}/>
-          </DrilldownLink>
-        </div>
-    );
-  }
-
-  renderIssues (metric, type) {
-    const { measures, component } = this.props;
-    const measure = measures.find(measure => measure.metric.key === metric);
-    const value = this.getValue(measure);
-    const params = { resolved: 'false', types: type };
-
-    if (isDiffMetric(metric)) {
-      Object.assign(params, { sinceLeakPeriod: 'true' });
-    }
-
-    const formattedSnapshotDate = moment(component.snapshotDate).format('LLL');
-    const tooltip = translateWithParameters('widget.as_calculated_on_x', formattedSnapshotDate);
-
-    return (
-        <IssuesLink component={component.key} params={params}>
-          <span title={tooltip} data-toggle="tooltip">
-            {formatMeasure(value, 'SHORT_INT')}
-          </span>
-        </IssuesLink>
-    );
+    return this.props.renderHeader(
+        'Maintainability',
+        translate('metric.code_smells.name'));
   }
 
   renderDebt (metric, type) {
     const { measures, component } = this.props;
     const measure = measures.find(measure => measure.metric.key === metric);
-    const value = this.getValue(measure);
+    const value = this.props.getValue(measure);
     const params = { resolved: 'false', facetMode: 'effort', types: type };
 
     if (isDiffMetric(metric)) {
@@ -128,26 +66,10 @@ export default class CodeSmells extends React.Component {
   }
 
   renderTimeline (range, displayDate) {
-    if (!this.props.history) {
-      return null;
-    }
-
-    const history = this.props.history['sqale_index'];
-
-    if (!history) {
-      return null;
-    }
-
-    const props = {
-      history,
-      [range]: getPeriodDate(this.props.leakPeriod)
-    };
-    return (
-        <div className="overview-domain-timeline">
-          <Timeline {...props}/>
-          {displayDate ? this.renderTimelineStartDate(range) : null}
-        </div>
-    );
+    return this.props.renderTimeline(
+        'sqale_index',
+        range,
+        displayDate ? this.renderTimelineStartDate(range) : null);
   }
 
   renderLeak () {
@@ -162,7 +84,7 @@ export default class CodeSmells extends React.Component {
           <div className="overview-domain-measures">
             <div className="overview-domain-measure">
               <div className="overview-domain-measure-value">
-                {this.renderIssues('new_code_smells', 'CODE_SMELL')}
+                {this.props.renderIssues('new_code_smells', 'CODE_SMELL')}
               </div>
               <div className="overview-domain-measure-label">
                 {getMetricName('new_code_smells')}
@@ -192,8 +114,8 @@ export default class CodeSmells extends React.Component {
             <div className="overview-domain-measure">
               <div className="display-inline-block text-middle" style={{ paddingLeft: 56 }}>
                 <div className="overview-domain-measure-value">
-                  {this.renderIssues('code_smells', 'CODE_SMELL')}
-                  {this.renderRating('sqale_rating')}
+                  {this.props.renderIssues('code_smells', 'CODE_SMELL')}
+                  {this.props.renderRating('sqale_rating')}
                 </div>
                 <div className="overview-domain-measure-label">
                   {getMetricName('code_smells')}
@@ -231,3 +153,5 @@ export default class CodeSmells extends React.Component {
     );
   }
 }
+
+export default enhance(CodeSmells);

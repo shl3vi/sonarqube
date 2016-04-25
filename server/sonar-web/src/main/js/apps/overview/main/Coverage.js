@@ -19,15 +19,13 @@
  */
 import React from 'react';
 
+import enhance from './enhance';
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
-import { DonutChart } from '../../../components/charts/donut-chart';
-import Timeline from '../components/Timeline';
 import { getMetricName } from '../helpers/metrics';
 import { formatMeasure, getPeriodValue } from '../../../helpers/measures';
 import { translate } from '../../../helpers/l10n';
-import { getPeriodDate } from '../../../helpers/periods';
 
-export default class Coverage extends React.Component {
+class Coverage extends React.Component {
   getCoverageMetricPrefix () {
     const { measures } = this.props;
     const hasOverallCoverage = !!measures
@@ -60,68 +58,18 @@ export default class Coverage extends React.Component {
   }
 
   renderHeader () {
-    const { component } = this.props;
-    const domainUrl = window.baseUrl + '/component_measures/domain/Coverage?id=' +
-        encodeURIComponent(component.key);
-
-    return (
-        <div className="overview-card-header">
-          <div className="overview-title">
-            <a href={domainUrl}>
-              {translate('metric.coverage.name')}
-            </a>
-          </div>
-        </div>
-    );
+    return this.props.renderHeader(
+        'Coverage',
+        translate('metric.coverage.name'));
   }
 
   renderTimeline (coverageMetricPrefix, range) {
-    if (!this.props.history) {
-      return null;
-    }
-
-    const metric = `${coverageMetricPrefix}coverage`;
-    const history = this.props.history[metric];
-
-    if (!history) {
-      return null;
-    }
-
-    const props = {
-      history,
-      [range]: getPeriodDate(this.props.leakPeriod)
-    };
-
-    return (
-        <div className="overview-domain-timeline">
-          <Timeline {...props}/>
-        </div>
-    );
+    const metricKey = `${coverageMetricPrefix}coverage`;
+    return this.props.renderTimeline(metricKey, range);
   }
 
   renderTests () {
-    const { measures, component } = this.props;
-    const tests = measures.find(measure => measure.metric.key === 'tests');
-
-    if (tests == null) {
-      return null;
-    }
-
-    return (
-        <div className="overview-domain-measure">
-          <div className="overview-domain-measure-value">
-            <DrilldownLink component={component.key} metric="tests">
-              <span className="js-overview-main-tests">
-                {formatMeasure(tests.value, 'SHORT_INT')}
-              </span>
-            </DrilldownLink>
-          </div>
-
-          <div className="overview-domain-measure-label">
-            {getMetricName('tests')}
-          </div>
-        </div>
-    );
+    return this.props.renderMeasure('tests');
   }
 
   renderCoverageDonut (coverage) {
@@ -129,19 +77,7 @@ export default class Coverage extends React.Component {
       { value: coverage, fill: '#85bb43' },
       { value: 100 - coverage, fill: '#d4333f' }
     ];
-
-    const props = {
-      data,
-      width: 40,
-      height: 40,
-      thickness: 4
-    };
-
-    return (
-        <div className="display-inline-block text-middle big-spacer-right">
-          <DonutChart {...props}/>
-        </div>
-    );
+    return this.props.renderDonut(data);
   }
 
   renderCoverage (coverageMetricPrefix) {
@@ -253,3 +189,5 @@ export default class Coverage extends React.Component {
     );
   }
 }
+
+export default enhance(Coverage);
