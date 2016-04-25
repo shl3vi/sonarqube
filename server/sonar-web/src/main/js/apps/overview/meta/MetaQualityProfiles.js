@@ -22,7 +22,7 @@ import React from 'react';
 import { QualityProfileLink } from '../../../components/shared/quality-profile-link';
 import { translate } from '../../../helpers/l10n';
 
-export default function MetaQualityProfiles ({ profiles }) {
+const MetaQualityProfiles = ({ profiles }) => {
   return (
       <div>
         <h4 className="overview-meta-header">
@@ -43,4 +43,6 @@ export default function MetaQualityProfiles ({ profiles }) {
         </ul>
       </div>
   );
-}
+};
+
+export default MetaQualityProfiles;

@@ -19,6 +19,7 @@
  */
 import d3 from 'd3';
 import React from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import { LineChart } from '../../../components/charts/line-chart';
 
@@ -32,6 +33,10 @@ export default class Timeline extends React.Component {
     before: React.PropTypes.object,
     after: React.PropTypes.object
   };
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
 
   filterSnapshots () {
     const { history, before, after } = this.props;

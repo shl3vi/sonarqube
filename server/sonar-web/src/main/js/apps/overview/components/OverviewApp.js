@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import moment from 'moment';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import QualityGate from '../qualityGate/QualityGate';
 import BugsAndVulnerabilities from '../main/BugsAndVulnerabilities';
@@ -96,6 +97,10 @@ export default class OverviewApp extends React.Component {
     document.querySelector('html').classList.add('dashboard-page');
     this.loadMeasures(this.props.component)
         .then(() => this.loadHistory(this.props.component));
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
   }
 
   componentDidUpdate (nextProps) {

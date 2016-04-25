@@ -19,7 +19,7 @@
  */
 import React from 'react';
 
-export default function MetaLinks ({ links }) {
+const MetaLinks = ({ links }) => {
   return (
       <ul className="overview-meta-list big-spacer-bottom">
         {links.map(link => (
@@ -36,4 +36,6 @@ export default function MetaLinks ({ links }) {
         ))}
       </ul>
   );
-}
+};
+
+export default MetaLinks;

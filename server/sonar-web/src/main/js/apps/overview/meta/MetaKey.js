@@ -21,7 +21,7 @@ import React from 'react';
 
 import { translate } from '../../../helpers/l10n';
 
-export default function MetaKey ({ component }) {
+const MetaKey = ({ component }) => {
   return (
       <div>
         <h4 className="overview-meta-header">
@@ -34,4 +34,6 @@ export default function MetaKey ({ component }) {
             readOnly={true}/>
       </div>
   );
-}
+};
+
+export default MetaKey;

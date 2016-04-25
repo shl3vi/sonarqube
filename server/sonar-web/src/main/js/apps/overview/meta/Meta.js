@@ -25,7 +25,7 @@ import MetaQualityGate from './MetaQualityGate';
 import MetaQualityProfiles from './MetaQualityProfiles';
 import EventsList from './../events/EventsList';
 
-export default function Meta ({ component }) {
+const Meta = ({ component }) => {
   const { qualifier, description, links, profiles, gate } = component;
 
   const isView = qualifier === 'VW' || qualifier === 'SVW';
@@ -70,4 +70,6 @@ export default function Meta ({ component }) {
         <EventsList component={component}/>
       </div>
   );
-}
+};
+
+export default Meta;

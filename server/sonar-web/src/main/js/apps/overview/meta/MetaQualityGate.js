@@ -22,7 +22,7 @@ import React from 'react';
 import { QualityGateLink } from '../../../components/shared/quality-gate-link';
 import { translate } from '../../../helpers/l10n';
 
-export default function MetaQualityGate ({ gate }) {
+const MetaQualityGate = ({ gate }) => {
   return (
       <div className="big-spacer-bottom">
         <h4 className="overview-meta-header">
@@ -43,4 +43,6 @@ export default function MetaQualityGate ({ gate }) {
         </ul>
       </div>
   );
-}
+};
+
+export default MetaQualityGate;

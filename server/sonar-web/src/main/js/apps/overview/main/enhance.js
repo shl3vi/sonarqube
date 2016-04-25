@@ -19,6 +19,7 @@
  */
 import React from 'react';
 import moment from 'moment';
+import shallowCompare from 'react-addons-shallow-compare';
 
 import { DrilldownLink } from '../../../components/shared/drilldown-link';
 import { IssuesLink } from '../../../components/shared/issues-link';
@@ -38,6 +39,10 @@ import { getPeriodDate } from '../../../helpers/periods';
 export default function enhance (ComposedComponent) {
   return class extends React.Component {
     static displayName = `enhance(${ComposedComponent.displayName})}`;
+
+    shouldComponentUpdate (nextProps, nextState) {
+      return shallowCompare(this, nextProps, nextState);
+    }
 
     getValue (measure) {
       const { leakPeriod } = this.props;
