@@ -29,7 +29,9 @@ const LeakPeriodLegend = ({ period }) => {
 
   const momentDate = moment(leakPeriodDate);
   const fromNow = momentDate.fromNow();
-  const tooltip = 'Started on ' + momentDate.format('LL');
+  const tooltip = translateWithParameters(
+      'overview.started_on_x',
+      momentDate.format('LL'));
 
   return (
       <div className="overview-legend" title={tooltip} data-toggle="tooltip">
