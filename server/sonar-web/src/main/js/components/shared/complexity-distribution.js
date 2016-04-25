@@ -19,9 +19,9 @@
  */
 import React from 'react';
 
-import { BarChart } from '../../../components/charts/bar-chart';
-import { formatMeasure } from '../../../helpers/measures';
-import { translateWithParameters } from '../../../helpers/l10n';
+import { BarChart } from '../charts/bar-chart';
+import { formatMeasure } from '../../helpers/measures';
+import { translateWithParameters } from '../../helpers/l10n';
 
 const HEIGHT = 80;
 

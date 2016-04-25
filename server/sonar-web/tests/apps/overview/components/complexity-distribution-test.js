@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 
-import { ComplexityDistribution } from '../../../../src/main/js/apps/overview/components/complexity-distribution';
+import { ComplexityDistribution } from '../../../../src/main/js/components/shared/complexity-distribution';
 
 
 const DISTRIBUTION = '1=11950;2=86;4=77;6=43;8=17;10=12;12=3';
