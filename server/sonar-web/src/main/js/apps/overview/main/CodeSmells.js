@@ -69,7 +69,7 @@ class CodeSmells extends React.Component {
     return this.props.renderTimeline(
         'sqale_index',
         range,
-        displayDate ? this.renderTimelineStartDate(range) : null);
+        displayDate ? this.renderTimelineStartDate() : null);
   }
 
   renderLeak () {
