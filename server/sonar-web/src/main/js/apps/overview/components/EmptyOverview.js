@@ -21,7 +21,7 @@ import React from 'react';
 
 import { translate } from '../../../helpers/l10n';
 
-export default function EmptyOverview ({ component }) {
+const EmptyOverview = ({ component }) => {
   return (
       <div className="page page-limited">
         <div className="alert alert-warning">
@@ -33,4 +33,6 @@ export default function EmptyOverview ({ component }) {
         </div>
       </div>
   );
-}
+};
+
+export default EmptyOverview;
