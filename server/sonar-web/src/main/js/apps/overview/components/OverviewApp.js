@@ -26,7 +26,7 @@ import CodeSmells from '../main/CodeSmells';
 import Coverage from '../main/Coverage';
 import Duplications from '../main/Duplications';
 import Size from '../main/Size';
-import Meta from './Meta';
+import Meta from './../meta/Meta';
 import { getMeasuresAndMeta } from '../../../api/measures';
 import { getTimeMachineData } from '../../../api/time-machine';
 import { enhanceMeasuresWithMetrics } from '../../../helpers/measures';
