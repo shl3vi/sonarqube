@@ -25,7 +25,13 @@ import { IssuesLink } from '../../../components/shared/issues-link';
 import { DonutChart } from '../../../components/charts/donut-chart';
 import { Rating } from './../../../components/shared/rating';
 import Timeline from '../components/Timeline';
-import { formatMeasure, formatMeasureVariation, isDiffMetric, getPeriodValue } from '../../../helpers/measures';
+import {
+    formatMeasure,
+    formatMeasureVariation,
+    isDiffMetric,
+    getPeriodValue,
+    getShortType
+} from '../../../helpers/measures';
 import { translateWithParameters } from '../../../helpers/l10n';
 import { getPeriodDate } from '../../../helpers/periods';
 
@@ -47,7 +53,10 @@ export default function enhance (ComposedComponent) {
 
     renderHeader (label, domain) {
       const { component } = this.props;
-      const domainUrl = `${window.baseUrl}/component_measures/domain/${domain}?id=${encodeURIComponent(component.key)}`;
+      const domainUrl =
+          window.baseUrl +
+          `/component_measures/domain/${domain}` +
+          `id=${encodeURIComponent(component.key)}`;
 
       return (
           <div className="overview-card-header">
@@ -71,7 +80,7 @@ export default function enhance (ComposedComponent) {
             <div className="overview-domain-measure-value">
               <DrilldownLink component={component.key} metric={metricKey}>
               <span className="js-overview-main-tests">
-                {formatMeasure(measure.value, measure.metric.type)}
+                {formatMeasure(measure.value, getShortType(measure.metric.type))}
               </span>
               </DrilldownLink>
             </div>
@@ -90,7 +99,7 @@ export default function enhance (ComposedComponent) {
       const measure = measures.find(measure => measure.metric.key === metricKey);
       const periodValue = getPeriodValue(measure, leakPeriod.index);
       const formatted = periodValue != null ?
-          formatMeasureVariation(periodValue, measure.metric.type) :
+          formatMeasureVariation(periodValue, getShortType(measure.metric.type)) :
           NO_VALUE;
 
       return (
