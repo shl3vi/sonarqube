@@ -32,7 +32,7 @@ const LeakPeriodLegend = ({ period }) => {
   const tooltip = 'Started on ' + momentDate.format('LL');
 
   return (
-      <div className="overview-legend overview-leak" title={tooltip} data-toggle="tooltip">
+      <div className="overview-legend" title={tooltip} data-toggle="tooltip">
         {translateWithParameters('overview.leak_period_x', leakPeriodLabel)}
         <br/>
         <span className="note">

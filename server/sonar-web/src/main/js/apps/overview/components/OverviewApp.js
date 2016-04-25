@@ -34,6 +34,8 @@ import { enhanceMeasuresWithMetrics } from '../../../helpers/measures';
 import { getLeakPeriod } from '../../../helpers/periods';
 import { ComponentType } from '../propTypes';
 
+import '../styles.css';
+
 const METRICS = [
   // quality gate
   'alert_status',

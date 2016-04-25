@@ -57,8 +57,13 @@ export const ComplexityDistribution = React.createClass({
   },
 
   render () {
-    return <div className="overview-bar-chart" style={{ height: HEIGHT }}>
-      {this.renderBarChart()}
-    </div>;
+    // TODO remove inline styling
+    return (
+        <div
+            className="overview-bar-chart"
+            style={{ height: HEIGHT, paddingTop: 10, paddingBottom: 15 }}>
+          {this.renderBarChart()}
+        </div>
+    );
   }
 });

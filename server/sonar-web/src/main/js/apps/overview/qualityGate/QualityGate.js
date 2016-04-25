@@ -24,8 +24,6 @@ import EmptyQualityGate from './EmptyQualityGate';
 import { ComponentType, MeasuresListType, PeriodsListType } from '../propTypes';
 import { translate } from '../../../helpers/l10n';
 
-import './styles.css';
-
 function parseQualityGateDetails (rawDetails) {
   return JSON.parse(rawDetails);
 }
