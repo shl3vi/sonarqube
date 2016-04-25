@@ -82,8 +82,6 @@ const HISTORY_METRICS_LIST = [
   'coverage'
 ];
 
-// TODO handle provisioned projects
-
 export default class OverviewApp extends React.Component {
   static propTypes = {
     component: ComponentType.isRequired

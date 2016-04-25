@@ -18,14 +18,32 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 import React from 'react';
-import { render } from 'react-dom';
+import shallowCompare from 'react-addons-shallow-compare';
 
-import App from './components/App';
+import OverviewApp from './OverviewApp';
+import EmptyOverview from './EmptyOverview';
+import { ComponentType } from '../propTypes';
 
-window.sonarqube.appStarted.then(options => {
-  const el = document.querySelector(options.el);
-  const component = { ...options.component, ...window.sonarqube.overview.component };
-  render((
-      <App component={component}/>
-  ), el);
-});
+export default class App extends React.Component {
+  static propTypes = {
+    component: ComponentType.isRequired
+  };
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
+  render () {
+    const { component } = this.props;
+
+    if (!component.snapshotDate) {
+      return <EmptyOverview {...this.props}/>;
+    }
+
+    return (
+        <OverviewApp
+            {...this.props}
+            leakPeriodIndex="1"/>
+    );
+  }
+}
