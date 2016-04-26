@@ -23,7 +23,7 @@ import classNames from 'classnames';
 import ComponentsList from './ComponentsList';
 import ListHeader from './ListHeader';
 import Spinner from '../../components/Spinner';
-import SourceViewer from '../../../code/components/SourceViewer';
+import SourceViewer from '../../../../components/source-viewer/SourceViewer';
 
 export default class ListView extends React.Component {
   static contextTypes = {
